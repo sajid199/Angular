@@ -2,25 +2,35 @@
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
-    const toggleBtn = document.getElementById('toggleSidebar');
+    const toggleButton = document.getElementById('toggleSidebar');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    // Sidebar Toggle Functionality
-    function toggleSidebar() {
+    // Sidebar Toggle
+    toggleButton.addEventListener('click', () => {
         sidebar.classList.toggle('active');
-        toggleBtn.classList.toggle('active');
-    }
+    });
 
-    toggleBtn.addEventListener('click', toggleSidebar);
-
-    // Close sidebar when clicking outside on smaller screens
+    // Close sidebar when clicking outside on mobile
     document.addEventListener('click', (event) => {
-        if (window.innerWidth <= 768 && 
-            !sidebar.contains(event.target) && 
-            !toggleBtn.contains(event.target)) {
+        const isClickInsideSidebar = sidebar.contains(event.target);
+        const isToggleButton = toggleButton.contains(event.target);
+        
+        if (!isClickInsideSidebar && !isToggleButton && window.innerWidth <= 768) {
             sidebar.classList.remove('active');
-            toggleBtn.classList.remove('active');
         }
+    });
+
+    // Navigation Link Active State
+    navLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            navLinks.forEach(l => l.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Close sidebar on mobile after navigation
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+            }
+        });
     });
 
     // Navigation and Content Loading
@@ -44,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Close sidebar on small screens after navigation
         if (window.innerWidth <= 768) {
             sidebar.classList.remove('active');
-            toggleBtn.classList.remove('active');
         }
     }
 
@@ -68,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', handleNavigation);
     handleNavigation();
 
-    // Responsive sidebar behavior
+    // Responsive Sidebar Behavior
     function handleResponsiveSidebar() {
         if (window.innerWidth > 768) {
             sidebar.classList.add('active');
@@ -79,5 +88,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial check and add resize listener
     handleResponsiveSidebar();
-    window.addEventListener('resize', handleResponsiveSidebar);
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('active');
+        }
+    });
+
+    // Search Page Functionality
+    function setupSearchPage() {
+        const searchInput = document.getElementById('fullTextSearch');
+        const searchButton = document.getElementById('searchActionBtn');
+        const searchResultsBody = document.getElementById('searchResultsBody');
+
+        // Placeholder search results function
+        function performSearch(query) {
+            // Clear previous results
+            searchResultsBody.innerHTML = '';
+
+            // Simulated search results (replace with actual search logic)
+            const sampleResults = [
+                {
+                    title: 'Project Proposal',
+                    description: 'Comprehensive document outlining project strategy',
+                    file: 'project_proposal.pdf',
+                    placeholder: '-'
+                },
+                {
+                    title: 'Meeting Notes',
+                    description: 'Detailed notes from team strategy meeting',
+                    file: 'team_meeting_notes.docx',
+                    placeholder: '-'
+                },
+                {
+                    title: 'Technical Specification',
+                    description: 'Detailed technical requirements and specifications',
+                    file: 'tech_spec.md',
+                    placeholder: '-'
+                }
+            ];
+
+            // Filter results based on query
+            const filteredResults = sampleResults.filter(result => 
+                result.title.toLowerCase().includes(query.toLowerCase()) ||
+                result.description.toLowerCase().includes(query.toLowerCase()) ||
+                result.file.toLowerCase().includes(query.toLowerCase())
+            );
+
+            // Populate results table
+            filteredResults.forEach(result => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${result.title}</td>
+                    <td>${result.description}</td>
+                    <td>${result.file}</td>
+                    <td>${result.placeholder}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary">View</button>
+                    </td>
+                `;
+                searchResultsBody.appendChild(row);
+            });
+        }
+
+        // Search button click event
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value.trim();
+            if (query) {
+                performSearch(query);
+            }
+        });
+
+        // Enter key press event for search input
+        searchInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query) {
+                    performSearch(query);
+                }
+            }
+        });
+    }
+
+    // Add search page setup to page load event
+    const searchTemplate = document.getElementById('search-template');
+    if (searchTemplate) {
+        searchTemplate.addEventListener('DOMNodeInserted', () => {
+            setupSearchPage();
+        });
+    }
 });
