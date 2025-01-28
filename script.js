@@ -176,4 +176,75 @@ document.addEventListener('DOMContentLoaded', () => {
             setupSearchPage();
         });
     }
+
+    // Dashboard Functionality
+    function setupDashboard() {
+        const dashboardSettings = document.getElementById('dashboardSettings');
+        const profileDropdown = document.getElementById('profileDropdown');
+
+        // Dashboard Settings Button
+        if (dashboardSettings) {
+            dashboardSettings.addEventListener('click', () => {
+                // Placeholder for settings modal or navigation
+                alert('Dashboard Settings clicked');
+            });
+        }
+
+        // Profile Dropdown Interactions
+        if (profileDropdown) {
+            const dropdownItems = profileDropdown.closest('.dropdown').querySelectorAll('.dropdown-item');
+            
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', (event) => {
+                    const target = event.currentTarget.getAttribute('href').substring(1);
+                    
+                    switch(target) {
+                        case 'profile':
+                            // Navigate to profile page or open profile modal
+                            alert('Profile page');
+                            break;
+                        case 'settings':
+                            // Open settings modal or navigate to settings page
+                            alert('Settings page');
+                            break;
+                        case 'logout':
+                            // Implement logout functionality
+                            alert('Logging out');
+                            break;
+                    }
+                });
+            });
+        }
+
+        // Optional: Refresh or update metrics periodically
+        function updateMetrics() {
+            // Placeholder for fetching and updating metrics
+            const metricCards = document.querySelectorAll('.metric-card');
+            
+            // Simulated metrics update
+            const metrics = [
+                { selector: '.total-documents .metric-value', value: '2,0134' },
+                { selector: '.last-sessions .metric-value', value: '50' },
+                { selector: '.most-used-search .metric-value', value: 'Project Docs' }
+            ];
+
+            metrics.forEach(metric => {
+                const element = document.querySelector(metric.selector);
+                if (element) {
+                    element.textContent = metric.value;
+                }
+            });
+        }
+
+        // Update metrics every 5 minutes
+        setInterval(updateMetrics, 5 * 60 * 1000);
+    }
+
+    // Add dashboard setup to page load event
+    const homeTemplate = document.getElementById('home-template');
+    if (homeTemplate) {
+        homeTemplate.addEventListener('DOMNodeInserted', () => {
+            setupDashboard();
+        });
+    }
 });

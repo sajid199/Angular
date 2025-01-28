@@ -197,6 +197,138 @@ body {
     background-color: rgba(52, 152, 219, 0.1);
 }
 
+/* Dashboard Header Styling */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-logo img {
+    max-height: 40px;
+    max-width: 150px;
+}
+
+.dashboard-profile .dropdown-toggle {
+    background-color: transparent;
+    border: none;
+    color: var(--text-dark);
+    transition: color 0.3s ease;
+}
+
+.dashboard-profile .dropdown-toggle:hover {
+    color: var(--primary-color);
+}
+
+/* Dashboard Metrics Cards */
+.dashboard-metrics {
+    padding: 20px;
+}
+
+.metric-card {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.metric-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 20px;
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.metric-icon i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.metric-content {
+    flex-grow: 1;
+}
+
+.metric-title {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+    opacity: 0.7;
+}
+
+.metric-value {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.total-documents .metric-icon {
+    background-color: rgba(46, 204, 113, 0.1);
+}
+.total-documents .metric-icon i {
+    color: #2ecc71;
+}
+
+.last-sessions .metric-icon {
+    background-color: rgba(241, 196, 15, 0.1);
+}
+.last-sessions .metric-icon i {
+    color: #f1c40f;
+}
+
+.most-used-search .metric-icon {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+.most-used-search .metric-icon i {
+    color: #3498db;
+}
+
+/* Dashboard Settings Button */
+.dashboard-settings {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.btn-settings {
+    background-color: var(--primary-color);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-settings:hover {
+    background-color: #2980b9;
+    transform: rotate(90deg);
+}
+
+.btn-settings i {
+    font-size: 1.2rem;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
