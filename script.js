@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const isClickInsideSidebar = sidebar.contains(event.target);
         const isToggleButton = toggleButton.contains(event.target);
         
-        if (!isClickInsideSidebar && !isToggleButton && window.innerWidth <= 768) {
+        if (!isClickInsideSidebar && !isToggleButton) {
             sidebar.classList.remove('active');
         }
     });
