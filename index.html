@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Dashboard</title>
+    
+    <!-- External CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Toggle Button -->
+            <button class="toggle-btn" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Sidebar -->
+            <nav class="sidebar" id="sidebar">
+                <div class="sidebar-logo">
+                    <img src="path/to/your/logo.png" alt="Company Logo">
+                </div>
+                <button class="toggle-btn" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="#home" class="nav-link active" data-target="home">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="#documents" class="nav-link" data-target="documents">
+                    <i class="fas fa-file-alt"></i> Documents
+                </a>
+                <a href="#search" class="nav-link" data-target="search">
+                    <i class="fas fa-search"></i> Search
+                </a>
+                <a href="#chat" class="nav-link" data-target="chat">
+                    <i class="fas fa-comments"></i> Chat
+                </a>
+                <div class="nav-footer">
+                    <a href="#settings" class="nav-link" data-target="settings">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <small class="d-block mt-2 text-muted">&copy; 2025 Your Company</small>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-10 col-sm-12" id="mainContent">
+                <!-- Dynamic content will be loaded here -->
+            </main>
+        </div>
+    </div>
+
+    <!-- Page Templates (Hidden) -->
+    <template id="home-template">
+        <div class="page-content home-page">
+            <header class="page-header">
+                <h1>Dashboard Home</h1>
+            </header>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Quick Stats</h5>
+                            <p class="card-text">Overview of your current activities</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="documents-template">
+        <div class="page-content documents-page">
+            <header class="page-header">
+                <h1>Document Management</h1>
+            </header>
+            <div class="document-list">
+                <!-- Placeholder for document list -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Recent Documents</h5>
+                        <p>No documents found.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="search-template">
+        <div class="page-content search-page">
+            <header class="page-header">
+                <h1>Advanced Search</h1>
+            </header>
+            <div class="search-container">
+                <input type="text" class="form-control" placeholder="Search...">
+                <button class="btn btn-primary mt-3">Search</button>
+            </div>
+        </div>
+    </template>
+
+    <template id="chat-template">
+        <div class="page-content chat-page">
+            <header class="page-header">
+                <h1>Chat Interface</h1>
+            </header>
+            <div class="chat-container">
+                <div class="chat-messages">
+                    <!-- Placeholder for chat messages -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" class="form-control" placeholder="Type a message...">
+                    <button class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="settings-template">
+        <div class="page-content settings-page">
+            <header class="page-header">
+                <h1>Settings</h1>
+            </header>
+            <div class="settings-container">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Application Settings</h5>
+                        <p>Customize your application preferences.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Sign In Modal -->
+    <div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="signInModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signInModalLabel">Sign In</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="signInForm">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Enter username">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter password">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center p-3 mt-4 border-top">
+        <small>&copy; 2025 Your Company</small>
+    </footer>
+
+    <!-- External JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
