@@ -169,14 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add search page setup to page load event
-    const searchTemplate = document.getElementById('search-template');
-    if (searchTemplate) {
-        searchTemplate.addEventListener('DOMNodeInserted', () => {
-            setupSearchPage();
-        });
-    }
-
     // Dashboard Functionality
     function setupDashboard() {
         const dashboardSettings = document.getElementById('dashboardSettings');
@@ -240,12 +232,27 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(updateMetrics, 5 * 60 * 1000);
     }
 
-    // Add dashboard setup to page load event
+    // Remove deprecated DOMNodeInserted event listeners
+    const searchTemplate = document.getElementById('search-template');
     const homeTemplate = document.getElementById('home-template');
+
+    // Use MutationObserver for dynamic content loading
+    const searchObserver = new MutationObserver((mutations) => {
+        setupSearchPage();
+        searchObserver.disconnect();
+    });
+
+    const homeObserver = new MutationObserver((mutations) => {
+        setupDashboard();
+        homeObserver.disconnect();
+    });
+
+    if (searchTemplate) {
+        searchObserver.observe(searchTemplate, { childList: true, subtree: true });
+    }
+
     if (homeTemplate) {
-        homeTemplate.addEventListener('DOMNodeInserted', () => {
-            setupDashboard();
-        });
+        homeObserver.observe(homeTemplate, { childList: true, subtree: true });
     }
 
     // Explicit Chat Functionality
@@ -253,8 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Debugging function to log and alert issues
         function debugLog(message, data) {
             console.error('CHAT DEBUG: ' + message, data || '');
-            // Uncomment the next line if you want pop-up alerts
-            // alert('CHAT DEBUG: ' + message);
         }
 
         // Core chat functionality
@@ -266,39 +271,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const chatInput = document.getElementById('chatInput');
             const sendMessageBtn = document.getElementById('sendMessageBtn');
 
+            // Clear any existing event listeners to prevent multiple bindings
+            if (sendMessageBtn) {
+                const oldSendMessageBtn = sendMessageBtn.cloneNode(true);
+                sendMessageBtn.parentNode.replaceChild(oldSendMessageBtn, sendMessageBtn);
+            }
+
             // Detailed element validation
-            if (!chatMessages) {
-                debugLog('ERROR: Cannot find chat messages container', {
-                    elementExists: false,
-                    possibleReasons: [
-                        'Template not loaded',
-                        'Incorrect ID used',
-                        'JavaScript loaded before DOM'
-                    ]
-                });
-                return;
-            }
-
-            if (!chatInput) {
-                debugLog('ERROR: Cannot find chat input', {
-                    elementExists: false,
-                    possibleReasons: [
-                        'Template not loaded',
-                        'Incorrect ID used',
-                        'JavaScript loaded before DOM'
-                    ]
-                });
-                return;
-            }
-
-            if (!sendMessageBtn) {
-                debugLog('ERROR: Cannot find send message button', {
-                    elementExists: false,
-                    possibleReasons: [
-                        'Template not loaded',
-                        'Incorrect ID used',
-                        'JavaScript loaded before DOM'
-                    ]
+            if (!chatMessages || !chatInput || !sendMessageBtn) {
+                debugLog('ERROR: Chat elements not found', {
+                    chatMessages: !!chatMessages,
+                    chatInput: !!chatInput,
+                    sendMessageBtn: !!sendMessageBtn
                 });
                 return;
             }
@@ -434,6 +418,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        // Attach chat initialization to navigation events
+        function attachChatInitToNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    // Small delay to ensure DOM is updated
+                    setTimeout(tryInitializeChat, 100);
+                });
+            });
+        }
+
         // Global error handler
         window.addEventListener('error', (event) => {
             debugLog('Unhandled error', { 
@@ -443,7 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Kick off initialization
+        // Initial setup
         tryInitializeChat();
+        attachChatInitToNavigation();
     })();
 });
