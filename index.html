@@ -243,7 +243,7 @@
             <header class="dashboard-header">
                 <div class="dashboard-logo">
                     <img src="assets/image/companylogo.png" alt="General Electric Logo">
-                     <h1>General Electric Company Private Limited</h1>
+                    <h1>Enterprise Chat</h1>
                 </div>
                 <div class="dashboard-profile">
                     <div class="dropdown">
@@ -266,12 +266,18 @@
                 </div>
             </header>
             <div class="chat-container">
-                <div class="chat-messages">
-                    <!-- Placeholder for chat messages -->
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-message ai-message">
+                        <div class="chat-message-content">
+                            Welcome to Enterprise Chat. How can I assist you today?
+                        </div>
+                    </div>
                 </div>
                 <div class="chat-input">
-                    <input type="text" class="form-control" placeholder="Type a message...">
-                    <button class="btn btn-primary">Send</button>
+                    <input type="text" class="form-control" id="chatInput" placeholder="Type a message...">
+                    <button class="btn btn-primary" id="sendMessageBtn">
+                        Send <i class="fas fa-paper-plane"></i>
+                    </button>
                 </div>
             </div>
         </div>

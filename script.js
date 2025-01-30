@@ -247,4 +247,65 @@ document.addEventListener('DOMContentLoaded', () => {
             setupDashboard();
         });
     }
+
+    // Chat Page Functionality
+    function setupChatPage() {
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+        function createMessageElement(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('chat-message-content');
+            contentDiv.textContent = message;
+            
+            messageDiv.appendChild(contentDiv);
+            return messageDiv;
+        }
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                // Add user message
+                const userMessageElement = createMessageElement(message, true);
+                chatMessages.appendChild(userMessageElement);
+                
+                // Clear input
+                chatInput.value = '';
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Simulate AI response (replace with actual AI service later)
+                setTimeout(() => {
+                    const aiResponse = "Thank you for your message. I'm processing your request.";
+                    const aiMessageElement = createMessageElement(aiResponse);
+                    chatMessages.appendChild(aiMessageElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        // Send message on button click
+        sendMessageBtn.addEventListener('click', sendMessage);
+
+        // Send message on Enter key press
+        chatInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
+
+    // Add chat page setup to page load event
+    const chatTemplate = document.getElementById('chat-template');
+    if (chatTemplate) {
+        chatTemplate.addEventListener('DOMNodeInserted', () => {
+            setupChatPage();
+        });
+    }
 });
