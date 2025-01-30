@@ -248,64 +248,202 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Chat Page Functionality
-    function setupChatPage() {
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const sendMessageBtn = document.getElementById('sendMessageBtn');
-
-        function createMessageElement(message, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('chat-message');
-            messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.classList.add('chat-message-content');
-            contentDiv.textContent = message;
-            
-            messageDiv.appendChild(contentDiv);
-            return messageDiv;
+    // Explicit Chat Functionality
+    (function() {
+        // Debugging function to log and alert issues
+        function debugLog(message, data) {
+            console.error('CHAT DEBUG: ' + message, data || '');
+            // Uncomment the next line if you want pop-up alerts
+            // alert('CHAT DEBUG: ' + message);
         }
 
-        function sendMessage() {
-            const message = chatInput.value.trim();
-            if (message) {
-                // Add user message
-                const userMessageElement = createMessageElement(message, true);
-                chatMessages.appendChild(userMessageElement);
-                
-                // Clear input
-                chatInput.value = '';
-                
-                // Scroll to bottom
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Core chat functionality
+        function initializeChat() {
+            debugLog('Initializing chat functionality');
 
-                // Simulate AI response (replace with actual AI service later)
-                setTimeout(() => {
-                    const aiResponse = "Thank you for your message. I'm processing your request.";
-                    const aiMessageElement = createMessageElement(aiResponse);
-                    chatMessages.appendChild(aiMessageElement);
+            // Explicitly find chat elements
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+            // Detailed element validation
+            if (!chatMessages) {
+                debugLog('ERROR: Cannot find chat messages container', {
+                    elementExists: false,
+                    possibleReasons: [
+                        'Template not loaded',
+                        'Incorrect ID used',
+                        'JavaScript loaded before DOM'
+                    ]
+                });
+                return;
+            }
+
+            if (!chatInput) {
+                debugLog('ERROR: Cannot find chat input', {
+                    elementExists: false,
+                    possibleReasons: [
+                        'Template not loaded',
+                        'Incorrect ID used',
+                        'JavaScript loaded before DOM'
+                    ]
+                });
+                return;
+            }
+
+            if (!sendMessageBtn) {
+                debugLog('ERROR: Cannot find send message button', {
+                    elementExists: false,
+                    possibleReasons: [
+                        'Template not loaded',
+                        'Incorrect ID used',
+                        'JavaScript loaded before DOM'
+                    ]
+                });
+                return;
+            }
+
+            // Predefined response patterns
+            const responsePatterns = {
+                greetings: [
+                    "Hi there! How can I assist you today?",
+                    "Hello! Welcome to Enterprise Chat. What can I help you with?",
+                    "Good day! I'm here to support you. What do you need?"
+                ],
+                help: [
+                    "I'm here to help. What specific assistance do you require?",
+                    "Sure, I can help you. Could you provide more details about what you need?",
+                    "I'm ready to support you. Please tell me more about your request."
+                ],
+                default: [
+                    "Thank you for your message. I'm processing your request.",
+                    "I've received your message and will get back to you shortly.",
+                    "Your message has been noted. Let me work on that for you."
+                ]
+            };
+
+            function getResponse(userMessage) {
+                const lowerMessage = userMessage.toLowerCase();
+                
+                // Check for greetings
+                const greetingKeywords = ['hi', 'hello', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening'];
+                if (greetingKeywords.some(keyword => lowerMessage.includes(keyword))) {
+                    return responsePatterns.greetings[Math.floor(Math.random() * responsePatterns.greetings.length)];
+                }
+
+                // Check for help-related keywords
+                const helpKeywords = ['help', 'support', 'assist', 'question', 'problem', 'issue'];
+                if (helpKeywords.some(keyword => lowerMessage.includes(keyword))) {
+                    return responsePatterns.help[Math.floor(Math.random() * responsePatterns.help.length)];
+                }
+
+                // Default response
+                return responsePatterns.default[Math.floor(Math.random() * responsePatterns.default.length)];
+            }
+
+            function createMessageElement(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('chat-message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('chat-message-content');
+                contentDiv.textContent = message;
+                
+                messageDiv.appendChild(contentDiv);
+                return messageDiv;
+            }
+
+            function sendMessage() {
+                debugLog('Send message function called');
+                const message = chatInput.value.trim();
+                
+                if (message) {
+                    debugLog('Sending message', { message });
+                    
+                    // Add user message
+                    const userMessageElement = createMessageElement(message, true);
+                    chatMessages.appendChild(userMessageElement);
+                    
+                    // Clear input
+                    chatInput.value = '';
+                    
+                    // Scroll to bottom
                     chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 1000);
+
+                    // Generate AI response
+                    setTimeout(() => {
+                        const aiResponse = getResponse(message);
+                        debugLog('AI Response generated', { response: aiResponse });
+                        
+                        const aiMessageElement = createMessageElement(aiResponse);
+                        chatMessages.appendChild(aiMessageElement);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000);
+                } else {
+                    debugLog('Empty message, not sending');
+                }
             }
+
+            // Attach event listeners with error handling
+            try {
+                sendMessageBtn.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+                
+                debugLog('Chat event listeners attached successfully');
+            } catch (error) {
+                debugLog('Error attaching event listeners', { error });
+            }
+
+            debugLog('Chat initialization complete');
         }
 
-        // Send message on button click
-        sendMessageBtn.addEventListener('click', sendMessage);
+        // Multiple initialization strategies
+        function tryInitializeChat() {
+            debugLog('Attempting to initialize chat');
 
-        // Send message on Enter key press
-        chatInput.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                sendMessage();
+            // Strategy 1: Wait for DOM to be fully loaded
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeChat);
+            } 
+            // Strategy 2: If DOM is already loaded
+            else {
+                initializeChat();
             }
-        });
-    }
 
-    // Add chat page setup to page load event
-    const chatTemplate = document.getElementById('chat-template');
-    if (chatTemplate) {
-        chatTemplate.addEventListener('DOMNodeInserted', () => {
-            setupChatPage();
+            // Strategy 3: Fallback observer
+            const observer = new MutationObserver((mutations) => {
+                const chatTemplate = document.getElementById('chat-template');
+                const chatMessages = document.getElementById('chatMessages');
+                
+                if (chatTemplate && chatMessages) {
+                    debugLog('Chat template and messages found via observer');
+                    observer.disconnect();
+                    initializeChat();
+                }
+            });
+
+            // Start observing the entire document
+            observer.observe(document.documentElement, {
+                childList: true,
+                subtree: true
+            });
+        }
+
+        // Global error handler
+        window.addEventListener('error', (event) => {
+            debugLog('Unhandled error', { 
+                message: event.message, 
+                filename: event.filename, 
+                lineno: event.lineno 
+            });
         });
-    }
+
+        // Kick off initialization
+        tryInitializeChat();
+    })();
 });
