@@ -5,17 +5,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleButton = document.getElementById('toggleSidebar');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    // Sidebar Toggle
-    toggleButton.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-    });
+    // Ensure toggle functionality works only on mobile
+    function setupToggle() {
+        toggleButton.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle('active');
+            }
+        });
+    }
+
+    // Responsive Sidebar Behavior
+    function handleResponsiveSidebar() {
+        // Ensure sidebar state is reset on resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+                toggleButton.style.display = 'none';
+            } else {
+                sidebar.classList.remove('active');
+                toggleButton.style.display = 'flex';
+            }
+        });
+    }
+
+    // Call both functions to set up toggle
+    setupToggle();
+    handleResponsiveSidebar();
 
     // Close sidebar when clicking outside on mobile
     document.addEventListener('click', (event) => {
-        const isClickInsideSidebar = sidebar.contains(event.target);
-        const isToggleButton = toggleButton.contains(event.target);
-        
-        if (!isClickInsideSidebar && !isToggleButton) {
+        if (window.innerWidth <= 768 && 
+            !sidebar.contains(event.target) && 
+            !toggleButton.contains(event.target)) {
             sidebar.classList.remove('active');
         }
     });
@@ -76,23 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial page load and hash change listener
     window.addEventListener('hashchange', handleNavigation);
     handleNavigation();
-
-    // Responsive Sidebar Behavior
-    function handleResponsiveSidebar() {
-        if (window.innerWidth > 768) {
-            sidebar.classList.add('active');
-        } else {
-            sidebar.classList.remove('active');
-        }
-    }
-
-    // Initial check and add resize listener
-    handleResponsiveSidebar();
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            sidebar.classList.remove('active');
-        }
-    });
 
     // Search Page Functionality
     function setupSearchPage() {
